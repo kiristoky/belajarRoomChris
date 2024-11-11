@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
+// `AppContainer` adalah interface yang berfungsi sebagai tempat untuk menyediakan `itemsRepository`,
+// memungkinkan injeksi dependensi dalam aplikasi.
+//
+// `AppDataContainer` adalah implementasi dari `AppContainer` yang menyediakan instance `itemsRepository`.
+// Dengan menggunakan `OfflineItemsRepository`, kelas ini bertanggung jawab untuk menginisialisasi
+// database dan DAO yang diperlukan, lalu menyediakan repositori sebagai singleton.
+
 package com.example.inventory.data
 
 import android.content.Context
 
-/**
- * App container for Dependency injection.
- */
 interface AppContainer {
+    // Repository untuk mengelola item dalam aplikasi.
     val itemsRepository: ItemsRepository
 }
 
-/**
- * [AppContainer] implementation that provides instance of [OfflineItemsRepository]
- */
 class AppDataContainer(private val context: Context) : AppContainer {
-    /**
-     * Implementation for [ItemsRepository]
-     */
+
+    // Menginisialisasi `itemsRepository` secara lazy, agar hanya diinisialisasi ketika dibutuhkan.
     override val itemsRepository: ItemsRepository by lazy {
         OfflineItemsRepository(InventoryDatabase.getDatabase(context).itemDao())
     }
